@@ -1,0 +1,86 @@
+[
+    {
+        "cat_id": 12345,
+        "q_id": 4321,
+        "question": "What does Harry Potter own?",
+        "correct_answer": 2,
+        "answers": [
+            "The Philosopher's stone",
+            "A brown owl",
+            "A cloak of invisibility",
+            "The sword of Godric Gryffindor"
+        ]
+    },
+    {
+        "cat_id": 12345,
+        "q_id": 7890,
+        "question": "Harry Potter’s birthday is on...",
+        "correct_answer": 2,
+        "answers": [
+            "June 18th",
+            "July 21st",
+            "July 31st",
+            "August 1st"
+        ]
+    },
+    {
+        "cat_id": 12345,
+        "q_id": 7855,
+        "question": "Who is the security guard at the entrance of Gryffindor’s Common room?",
+        "correct_answer": 3,
+        "answers": [
+            "Nicholas Flamel",
+            "A Basilisk",
+            "Mundungus Fletcher",
+            "The Fat Lady"
+        ]
+    },
+    {
+        "cat_id": 12345,
+        "q_id": 6777,
+        "question": "While doing the Triwizard Tournament’s second task, what does Harry do to breathe under water?",
+        "correct_answer": 1,
+        "answers": [
+            "Wears an enchanted mask with an air bubble",
+            "He eats Gillyweed",
+            "He makes a potion Neville told him about",
+            "He finds a spell to breathe under water"
+        ]
+    },
+    {
+        "cat_id": 56789,
+        "q_id": 7548,
+        "question": "How tall was the tallest person to ever live?",
+        "correct_answer": 1,
+        "answers": [
+            "2.51 meters",
+            "2.72 meters",
+            "2.33 meters",
+            "2.77 meters"
+        ]
+    },
+    {
+        "cat_id": 12345,
+        "q_id": 9274,
+        "question": "Who brought Harry to Hogwarts when he was matured to go there?",
+        "correct_answer": 0,
+        "answers": [
+            "Hagrid",
+            "Albus Dumbledore",
+            "Minerva McGonagall",
+            "The Weasleys"
+        ]
+    },
+    {
+        "cat_id": 12345,
+        "q_id": 4179,
+        "question": "Which is the middle name of Tom Riddle who is also called Lord Voldemort?",
+        "correct_answer": 2,
+        "answers": [
+            "Marlovo",
+            "Malorvo",
+            "Marvolo",
+            "Marolvo"
+        ]
+    }
+]

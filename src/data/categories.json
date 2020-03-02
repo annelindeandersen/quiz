@@ -1,0 +1,14 @@
+[
+    {
+        "id": 12345,
+        "category": "harrypotter",
+        "title": "Harry Potter",
+        "img": "harrypotter.jpg"
+    },
+    {
+        "id": 56789,
+        "category": "random",
+        "title": "Random",
+        "img": "random.jpg"
+    }
+]

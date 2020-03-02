@@ -1,38 +1,277 @@
+* {
+  box-sizing: border-box;
+}
+
+button {
+  padding: 20px 100px;
+  border-radius: 20px;
+  border: none;
+  background: purple;
+  color: white;
+  text-transform: uppercase;
+  margin-top: 50px;
+  /* font-weight: bolder; */
+  font-size: 35px;
+  font-family: 'Anton';
+  cursor: pointer;
+  margin-bottom: 40px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+button:active, input:active, select:active {
+  outline: none;
+  border: none;
+  }
+  
+button:focus, input:focus, select:focus {outline:0;}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Raleway';
+  position: relative;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.page {
+  position: absolute;
+  top: 100px;
+  width: 100vw;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/***************HOMEPAGE*******************/
+
+.pageTitle {
+  font-size: 4vw;
+  text-transform: uppercase;
+  color: #444444;
+  text-shadow: 3px 3px 2px pink;
+  padding: 0px;
+  margin: 0px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#categoryWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 40px;
+  padding: 2vw 5vw;
+  /* width: 90vw; */
+}
+
+.categoryContainer {
+  /* padding: 30px 30px; */
+  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  cursor: pointer;
+}
+
+.quizImg {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px gray;
+}
+
+.categoryContainer:hover {
+  opacity: 0.8;
+}
+
+.quizTitle {
+  position: absolute;
+  /* padding: 30px; */
+  color: white;
+  font-size: 6vw;
+}
+
+.quizQs {
+  position: absolute;
+  color: white;
+  font-size: 2vw;
+  bottom: 10px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px black;
+}
+
+.quizTitle:first {
+  font-family: fantasy;
+}
+
+.quizTitle:last-of-type {
+  text-shadow: 3px 3px 2px black;
+}
+
+.headerbar {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 80px;
+  padding: 0px 5vw;
+  background: #d1d1d1;
+  display: grid;
+  justify-items: flex-start;
+  align-items: center;
+  font-family: 'Anton';
+  box-shadow: 0px 0px 15px gray;
+}
+
+
+/*******************QUIZ**********************/
+
+#quizContainer {
+  padding: 5px 5vw;
+}
+
+#quizContainer>h1:first-of-type {
+  font-size: 40px;
+  padding: 0 0 40px;
+  margin-top: -10px;
+}
+
+.quizAnswers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.answer {
+  background: rgba(128, 0, 128, 0.096);
+  padding: 45px 20px;
+  border-radius: 20px;
+  display: grid;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.5s linear;
+}
+
+.clicked {
+  background: rgba(128, 0, 128, 0.336);
+}
+
+.statusTrue {
+  background: greenyellow;
+}
+
+.statusTrueFlicker {
+  /* background: greenyellow; */
+  animation: flicker 0.9s linear forwards infinite;
+  /* animation */
+}
+
+@keyframes flicker {
+    0% { background: rgba(128, 0, 128, 0.096); }
+    49% { background: rgba(128, 0, 128, 0.096); }
+    50% { background: greenyellow; }
+    99% { background: greenyellow; }
+    100% { background: rgba(128, 0, 128, 0.096); }
+}
+
+.statusFalse {
+  background: red;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#timeLine {
+  background: purple;
+  height: 15px;
+  width: initial;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* transition: width 5s linear; */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.timeLeft {
+  background: purple;
+  height: 15px;
+  width: 100vw !important;
+}
+
+#tooLate {
+  position: absolute;
+  top: 15px;
+  left: 25%;
+  font-size: 150px;
+  text-transform: uppercase;
+  transform: rotate(-25deg) !important;
+  color: red;
+  font-weight: lighter;
+  font-family: 'Anton';
+  text-shadow: 4px 4px 4px white;
+  transform: scale(0);
+  transition: transform 1s ease-out;
+}
+
+.tooLate {
+  transform: scale(1) !important;
+}
+
+/* #tooLate::after {
+  content: '';
+  display: inline-block;
+  transform: scale(1) !important;
+} */
+
+/***********************SCORE************************/
+
+#highscoreContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.score {
+  background: rgba(128, 0, 128, 0.096);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 50vw;
+}
+
+.last {
+  background: rgba(128, 0, 128, 0.377);
+  position: relative;
+}
+
+.last::before {
+  content: '';
+  height: 0;
+  width: 0;
+  border-left: 20px solid purple;
+  border-bottom: 20px solid transparent;
+  border-top: 20px solid transparent;
+  position: absolute;
+  left: -30px;
+  top: 35%;
+}
+
+/******************* TRANSITIONS ***********************/
+
+/* simple - enter transition 300ms, exit 150ms */
+.fade-appear,
+.fade-enter {
+    opacity: 0;
+    z-index: 1;
+}
+.fade-appear-active,
+.fade-enter.fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms linear 150ms;
+}
+
+.fade-exit {
+    opacity: 1;
+}
+
+.fade-exit.fade-exit-active {
+    opacity: 0;
+    transition: opacity 150ms linear;
 }
