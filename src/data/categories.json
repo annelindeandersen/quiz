@@ -10,5 +10,17 @@
         "category": "random",
         "title": "Random",
         "img": "random.jpg"
+    },
+    {
+        "id": 34567,
+        "category": "animals",
+        "title": "Animals",
+        "img": "animals.jpg"
+    },
+    {
+        "id": 76543,
+        "category": "webdev",
+        "title": "Development",
+        "img": "webdev.jpg"
     }
 ]

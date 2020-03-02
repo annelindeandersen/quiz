@@ -15,7 +15,7 @@ const QuizPage = () => {
     const [percentage, setPercentage] = useState(0);
     const [transition, setTransition] = useState(true);
     let timeNow = Math.floor(Date.now() / 10);
-    console.log(timeNow);
+    // console.log(timeNow);
     const [startTime, setStartTime] = useState('');
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const QuizPage = () => {
         setStartTime(timeStart);
     }, [currentQ]);
 
-    console.log({ START: startTime, END: timeNow, DIFF: timeNow - startTime });
+    // console.log({ START: startTime, END: timeNow, DIFF: timeNow - startTime });
 
     // get current quiz
     const currentQuiz = user_quizzes[user_quizzes.length - 1];
@@ -40,7 +40,7 @@ const QuizPage = () => {
 
     // if (currentAnswer === null && isClicked === false) {
     const answerTooLate = useCallback(() => {
-        console.log('answerTooLate', { currentAnswer, percentage, isClicked })
+        // console.log('answerTooLate', { currentAnswer, percentage, isClicked })
         if (currentAnswer === null && percentage === 100 && isClicked === false) {
             if (!currentQ) return;
             // console.log('*************************')
@@ -53,7 +53,7 @@ const QuizPage = () => {
     useEffect(() => {
         // get one random question
         countDown = setTimeout(answerTooLate, 10000);
-        console.log('current Q', currentQ)
+        // console.log('current Q', currentQ)
         if (currentQ === null) {
             const randomQuestion = currentQuestion[Math.floor(Math.random() * currentQuestion.length)]
             setCurrentQ(randomQuestion);
@@ -79,7 +79,7 @@ const QuizPage = () => {
         if (currentQuestion.length === 0) {
             history.push('/highscore');
         }
-        console.log('DO NOT GO HERE BEFORE CLICK')
+        // console.log('DO NOT GO HERE BEFORE CLICK')
         setPercentage(0);
         setTransition(false);
         setCurrentAnswer(null);
