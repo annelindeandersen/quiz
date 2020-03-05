@@ -1,11 +1,6 @@
 import React from 'react';
-import './App.css';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
+import './css/App.css';
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useSelector } from 'react-redux';
@@ -16,7 +11,7 @@ import HighScore from './components/HighScore';
 
 function App() {
   const user_quizzes = useSelector(state => state.user_quizzesRed.user_quizzes);
-  // console.log(user_quizzes.length);
+
   return (
     <div className="App">
       <Router>

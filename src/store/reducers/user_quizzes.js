@@ -15,7 +15,7 @@ const reducer = (state = initialState, action) => {
     }
     if (action.type === 'SAVE_QUESTION') {
         const last_quiz = state.user_quizzes.pop();
-        last_quiz.answers.push({ question: action.question, answer: action.answer, status: action.status });
+        last_quiz.answers.push({ question: action.question, answer: action.answer, status: action.status, time: action.time });
 
         return {
             ...state,

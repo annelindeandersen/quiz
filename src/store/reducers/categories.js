@@ -1,4 +1,4 @@
-import data from '../data/categories';
+import data from '../../data/categories';
 
 const initialState = {
     categories: data

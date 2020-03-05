@@ -1,4 +1,4 @@
-import data from '../data/questions';
+import data from '../../data/questions.json';
 
 const initialState = {
     questions: data

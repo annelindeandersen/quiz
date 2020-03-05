@@ -9,12 +9,13 @@ button {
   background: purple;
   color: white;
   text-transform: uppercase;
-  margin-top: 50px;
+  margin-top: 25px;
   /* font-weight: bolder; */
   font-size: 35px;
   font-family: 'Anton';
   cursor: pointer;
   margin-bottom: 40px;
+  transition: opacity 500ms ease-out;
 }
 
 button:hover {
@@ -165,7 +166,7 @@ body {
 @media screen and (max-width: 450px) {
   #categoryWrapper {
     grid-template-columns: 1fr;
-    grid-gap: 30px;
+    grid-gap: 35px;
     padding: 3vw 5vw 5vw;
   }
   .quizTitle {
@@ -177,6 +178,12 @@ body {
   }
   .pageTitle {
     font-size: 8.5vw;
+  }
+  .headerbar {
+    height: 70px;
+  }
+  .categoryContainer {
+    margin-top: -15px;
   }
 }
 
@@ -196,6 +203,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 20px;
+  margin-bottom: 20px;
 }
 
 .answer {
@@ -206,6 +214,7 @@ body {
   align-items: center;
   cursor: pointer;
   transition: background 0.5s linear;
+  height: 100%;
 }
 
 .clicked {
@@ -282,6 +291,7 @@ body {
   }
   .answer {
     padding: 35px 20px;
+    height: none;
   }
   #quizContainer>h1:first-of-type {
     padding: 0 0 10px;
@@ -362,6 +372,9 @@ body {
 @media screen and (max-width: 450px) {
   .score {
     width: 75vw;
+  }
+  #highscoreContainer {
+    margin-top: 10px;
   }
 }
 

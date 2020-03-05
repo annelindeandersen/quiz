@@ -10,14 +10,16 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
 // reducers
-import categories from './reducers/categories';
-import questions from './reducers/questions';
-import user_quizzes from './reducers/user_quizzes';
+import categories from './store/reducers/categories';
+import questions from './store/reducers/questions';
+import user_quizzes from './store/reducers/user_quizzes';
+import percentage from './store/reducers/percentage';
 
 const rootReducer = combineReducers({
     categoriesRed: categories,
     questionsRed: questions,
-    user_quizzesRed: user_quizzes
+    user_quizzesRed: user_quizzes,
+    percentageRed: percentage
 });
 
 const store = createStore(rootReducer, composeWithDevTools());

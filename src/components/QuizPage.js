@@ -1,10 +1,22 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
+
+// helper functions
+import { getCurrentQuiz, getPrevAnswers, getPrevQuestions } from '../helpers/quiz';
+import { getCurrentCategoryId } from '../helpers/categories';
+import { getCurrentQuestion } from '../helpers/questions';
+
+// hooks
+import { useAnswerTooLate, useSetQuestionStatus, useNextQuestion } from '../hooks/quiz';
+
 let countDown;
+let onLoad;
 
 const QuizPage = () => {
+    const percentage = useSelector(state => state.percentageRed.percentage);
+    console.log(percentage);
     const questions = useSelector(state => state.questionsRed.questions);
     const user_quizzes = useSelector(state => state.user_quizzesRed.user_quizzes);
     const dispatch = useDispatch();
@@ -12,80 +24,54 @@ const QuizPage = () => {
     const [currentQ, setCurrentQ] = useState(null);
     const [isClicked, setIsClicked] = useState(false);
     const [currentAnswer, setCurrentAnswer] = useState(null);
-    const [percentage, setPercentage] = useState(0);
+    // const [percentage, setPercentage] = useState(0);
     const [transition, setTransition] = useState(true);
     let timeNow = Math.floor(Date.now() / 10);
-    // console.log(timeNow);
     const [startTime, setStartTime] = useState('');
 
+    // helper variables with functions
+    const currentQuiz = getCurrentQuiz(user_quizzes);
+    const prevAnswers = getPrevAnswers(user_quizzes);
+    const prevQuestions = getPrevQuestions(prevAnswers);
+    const currentCategoryId = getCurrentCategoryId(currentQuiz);
+    const currentQuestion = getCurrentQuestion(questions, currentCategoryId, prevQuestions);
+
+    // hooks
+    const answerTooLate = useAnswerTooLate(currentAnswer, isClicked, setCurrentAnswer, setIsClicked, currentQ, dispatch, startTime);
+    const setQuestionStatus = useSetQuestionStatus(currentQ, dispatch, percentage, setIsClicked, setCurrentAnswer, countDown, startTime, setTransition);
+    const nextQuestion = useNextQuestion(dispatch, currentQuestion, history, percentage, setTransition, setCurrentAnswer, setCurrentQ, setIsClicked);
+
     useEffect(() => {
+        clearTimeout(countDown)
         let timeStart = Math.floor(Date.now() / 10);
         setStartTime(timeStart);
+        onLoad = setTimeout(() => {
+            console.log('ON LOAD')
+            setTransition(true)
+            if (percentage === 0) {
+                dispatch({ type: 'SAVE_PERCENTAGE', percent: 100 });
+                // setPercentage(100);
+            }
+        }, 10)
     }, [currentQ]);
-
-    // console.log({ START: startTime, END: timeNow, DIFF: timeNow - startTime });
-
-    // get current quiz
-    const currentQuiz = user_quizzes[user_quizzes.length - 1];
-    // get prev answers
-    const prevAnswers = user_quizzes.map(quiz => quiz.answers);
-    // get to prev questions array
-    const prevQuestionsMap = prevAnswers.map(answerArray => {
-        return answerArray.map(q_id => Number(q_id.question));
-    });
-    // get latest quiz id
-    const currentCategoryId = currentQuiz !== undefined ? currentQuiz.cat_id : '';
-    // get questions with category id and that have not already been answered!
-    const currentQuestion = questions.filter(catId => catId.cat_id === Number(currentCategoryId) && prevQuestionsMap[prevQuestionsMap.length - 1].indexOf(catId.q_id) === -1);
-
-    // if (currentAnswer === null && isClicked === false) {
-    const answerTooLate = useCallback(() => {
-        // console.log('answerTooLate', { currentAnswer, percentage, isClicked })
-        if (currentAnswer === null && percentage === 100 && isClicked === false) {
-            if (!currentQ) return;
-            // console.log('*************************')
-            dispatch({ type: 'SAVE_QUESTION', question: currentQ.q_id, answer: 'Time ran out', status: false });
-            setCurrentAnswer(false)
-            setIsClicked(true)
-        }
-    }, [currentAnswer, percentage, isClicked, setCurrentAnswer, setIsClicked, currentQ, dispatch])
 
     useEffect(() => {
         // get one random question
         countDown = setTimeout(answerTooLate, 10000);
-        // console.log('current Q', currentQ)
         if (currentQ === null) {
             const randomQuestion = currentQuestion[Math.floor(Math.random() * currentQuestion.length)]
             setCurrentQ(randomQuestion);
-            setTimeout(() => {
-                setTransition(true)
-                setPercentage(100);
-            }, 1)
         }
-    }, [currentQ, percentage])
+    }, [currentQ])
 
-    const setQuestionStatus = useCallback((answer, index) => {
+    useEffect(() => {
+        console.log('Change in currentAnswer / isClicked')
         let rightNow = Math.floor(Date.now() / 10);
-        if (!currentQ) return;
-        setPercentage((rightNow - startTime) / 10);
-        setTransition(false);
-        setIsClicked(true);
-        setCurrentAnswer(index);
-        dispatch({ type: 'SAVE_QUESTION', question: currentQ.q_id, answer: index, status: index === currentQ.correct_answer });
         clearTimeout(countDown)
-    }, [currentQ, dispatch, setPercentage, setIsClicked, setCurrentAnswer, countDown, startTime, setTransition]);
+        dispatch({ type: 'SAVE_PERCENTAGE', percent: ((rightNow - startTime) / 10) })
+    }, [currentAnswer, isClicked])
 
-    const nextQuestion = useCallback(() => {
-        if (currentQuestion.length === 0) {
-            history.push('/highscore');
-        }
-        // console.log('DO NOT GO HERE BEFORE CLICK')
-        setPercentage(0);
-        setTransition(false);
-        setCurrentAnswer(null);
-        setCurrentQ(null);
-        setIsClicked(false);
-    }, [dispatch, currentQuestion, history, setPercentage, setTransition, setCurrentAnswer, setCurrentQ, setIsClicked])
+    console.log({ currentAnswer, percentage, isClicked });
 
     return (
         <div className="page">
