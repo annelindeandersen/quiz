@@ -29,6 +29,7 @@ const HighScore = () => {
     const latestQuizInCurrentCategory = getLatestQuizInCurrentCategory(quizzesByCategory, latestQuiz);
 
     useEffect(() => {
+        console.log({ currentQuiz, currentCategoryId, numberOfQuestions, quizzesByCategory, numberOfQuizzes, trueAnswers, currentCategory, highscores, latestQuiz, latestQuizInCurrentCategory });
         setQuizJustFinished(latestQuizInCurrentCategory[0].id);
     }, [])
 

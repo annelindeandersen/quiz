@@ -9,14 +9,12 @@ import { getCurrentCategoryId } from '../helpers/categories';
 import { getCurrentQuestion } from '../helpers/questions';
 
 // hooks
-import { useAnswerTooLate, useSetQuestionStatus, useNextQuestion } from '../hooks/quiz';
+import { useFunctions, answerTooLate, setQuestionStatus, nextQuestion } from '../hooks/quiz';
 
 let countDown;
 let onLoad;
 
 const QuizPage = () => {
-    const percentage = useSelector(state => state.percentageRed.percentage);
-    console.log(percentage);
     const questions = useSelector(state => state.questionsRed.questions);
     const user_quizzes = useSelector(state => state.user_quizzesRed.user_quizzes);
     const dispatch = useDispatch();
@@ -24,7 +22,7 @@ const QuizPage = () => {
     const [currentQ, setCurrentQ] = useState(null);
     const [isClicked, setIsClicked] = useState(false);
     const [currentAnswer, setCurrentAnswer] = useState(null);
-    // const [percentage, setPercentage] = useState(0);
+    const [percentage, setPercentage] = useState(0);
     const [transition, setTransition] = useState(true);
     let timeNow = Math.floor(Date.now() / 10);
     const [startTime, setStartTime] = useState('');
@@ -37,38 +35,34 @@ const QuizPage = () => {
     const currentQuestion = getCurrentQuestion(questions, currentCategoryId, prevQuestions);
 
     // hooks
-    const answerTooLate = useAnswerTooLate(currentAnswer, isClicked, setCurrentAnswer, setIsClicked, currentQ, dispatch, startTime);
-    const setQuestionStatus = useSetQuestionStatus(currentQ, dispatch, percentage, setIsClicked, setCurrentAnswer, countDown, startTime, setTransition);
-    const nextQuestion = useNextQuestion(dispatch, currentQuestion, history, percentage, setTransition, setCurrentAnswer, setCurrentQ, setIsClicked);
+    useFunctions(currentAnswer, isClicked, setCurrentAnswer, setIsClicked, currentQ, dispatch, startTime, percentage, setPercentage, setTransition, setCurrentQ, currentQuestion, countDown, history);
 
     useEffect(() => {
         clearTimeout(countDown)
         let timeStart = Math.floor(Date.now() / 10);
         setStartTime(timeStart);
-        onLoad = setTimeout(() => {
-            console.log('ON LOAD')
-            setTransition(true)
-            if (percentage === 0) {
-                dispatch({ type: 'SAVE_PERCENTAGE', percent: 100 });
-                // setPercentage(100);
-            }
-        }, 10)
-    }, [currentQ]);
 
-    useEffect(() => {
         // get one random question
         countDown = setTimeout(answerTooLate, 10000);
         if (currentQ === null) {
             const randomQuestion = currentQuestion[Math.floor(Math.random() * currentQuestion.length)]
             setCurrentQ(randomQuestion);
         }
-    }, [currentQ])
+    }, [currentQ]);
+
+    useEffect(() => {
+        onLoad = setTimeout(() => {
+            console.log('ON LOAD')
+            setTransition(true)
+            if (percentage === 0) {
+                setPercentage(100);
+            }
+        }, 10)
+    }, [percentage]);
 
     useEffect(() => {
         console.log('Change in currentAnswer / isClicked')
-        let rightNow = Math.floor(Date.now() / 10);
         clearTimeout(countDown)
-        dispatch({ type: 'SAVE_PERCENTAGE', percent: ((rightNow - startTime) / 10) })
     }, [currentAnswer, isClicked])
 
     console.log({ currentAnswer, percentage, isClicked });

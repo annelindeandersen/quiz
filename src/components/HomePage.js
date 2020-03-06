@@ -1,19 +1,14 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { getCatWithQs } from '../helpers/categories';
 
 const HomePage = () => {
     const history = useHistory();
     const categories = useSelector(state => state.categoriesRed.categories);
     const questions = useSelector(state => state.questionsRed.questions);
     const dispatch = useDispatch();
-    let timeNow = Math.floor(Date.now() / 10);
-
-    // create new array with questions and categories together
-    const catWithQs = categories.map((category, index) => {
-        let questionFilter = questions.filter(question => question.cat_id === category.id)
-        return { ...category, ...{ questions: questionFilter } };
-    });
+    const catWithQs = getCatWithQs(categories, questions);
 
     return (
         <div className="page">
@@ -23,7 +18,7 @@ const HomePage = () => {
             <div id='categoryWrapper'>
                 {catWithQs.map((category, index) => (
                     <div key={index} className='categoryContainer' onClick={() => {
-                        dispatch({ type: 'SAVE_CAT', id: category.id, start_time: timeNow })
+                        dispatch({ type: 'SAVE_CAT', id: category.id })
                         history.push('/quiz')
                     }}>
                         <h2 className="quizTitle">{category.title}</h2>
