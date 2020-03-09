@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
+import Quizzes from '../components/Quizzes';
 
 // helper functions
 import { getNumberOfQuestions, getTrueAnswers } from '../helpers/questions';
 import { getCurrentCategoryId, getCurrentCategory } from '../helpers/categories';
 import { getCurrentQuiz, getNumberOfQuizzes, getHighscores, getQuizzesByCategory, getLatestQuiz, getLatestQuizInCurrentCategory } from '../helpers/quiz';
 
+/**
+ * This is a view rendering the quiz components in a highscore list
+ */
 const HighScore = () => {
     const [quizJustFinished, setQuizJustFinished] = useState('');
 
@@ -28,6 +32,7 @@ const HighScore = () => {
     const latestQuiz = getLatestQuiz(quizzesByCategory, numberOfQuizzes);
     const latestQuizInCurrentCategory = getLatestQuizInCurrentCategory(quizzesByCategory, latestQuiz);
 
+    // set the latest quiz completed
     useEffect(() => {
         console.log({ currentQuiz, currentCategoryId, numberOfQuestions, quizzesByCategory, numberOfQuizzes, trueAnswers, currentCategory, highscores, latestQuiz, latestQuizInCurrentCategory });
         setQuizJustFinished(latestQuizInCurrentCategory[0].id);
@@ -40,10 +45,7 @@ const HighScore = () => {
                 <h1 className="pageTitle">{currentCategory[0][0].title}</h1>
             </div>
             <div id="highscoreContainer">{highscores.map((quiz, index) =>
-                <div className={classNames({ "last": highscores[index].id === quizJustFinished }, "score")} key={index}>
-                    <h2>SCORE: {quiz.score.toFixed(0)} % - TIME: {quiz.time / 100} seconds</h2>
-                    <h4>Anonymous user - Category: {quiz.cat !== undefined ? quiz.cat.title : ''}</h4>
-                </div>
+                <Quizzes key={index} classNames={classNames} highscores={highscores} quiz={quiz} index={index} quizJustFinished={quizJustFinished} />
             )}</div>
             <Link to='/'><button>Try again</button></Link>
         </div>

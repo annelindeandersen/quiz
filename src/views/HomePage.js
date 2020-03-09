@@ -2,7 +2,11 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCatWithQs } from '../helpers/categories';
+import Categories from '../components/Categories';
 
+/**
+ * This is a view rendering the category components
+ */
 const HomePage = () => {
     const history = useHistory();
     const categories = useSelector(state => state.categoriesRed.categories);
@@ -17,14 +21,7 @@ const HomePage = () => {
             </div>
             <div id='categoryWrapper'>
                 {catWithQs.map((category, index) => (
-                    <div key={index} className='categoryContainer' onClick={() => {
-                        dispatch({ type: 'SAVE_CAT', id: category.id })
-                        history.push('/quiz')
-                    }}>
-                        <h2 className="quizTitle">{category.title}</h2>
-                        <p className="quizQs">Amount of questions: {category.questions.length}</p>
-                        <img className="quizImg" src={require(`../assets/img/${category.img}`)} alt={category.img} />
-                    </div>
+                    <Categories key={index} category={category} index={index} dispatch={dispatch} history={history} />
                 ))}
             </div>
         </div>

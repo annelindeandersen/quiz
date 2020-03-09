@@ -5,9 +5,9 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useSelector } from 'react-redux';
 
-import HomePage from './components/HomePage';
-import QuizPage from './components/QuizPage';
-import HighScore from './components/HighScore';
+import HomePage from './views/HomePage';
+import QuizPage from './views/QuizPage';
+import HighScore from './views/HighScore';
 
 function App() {
   const user_quizzes = useSelector(state => state.user_quizzesRed.user_quizzes);

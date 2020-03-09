@@ -3,6 +3,13 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import classNames from 'classnames';
 
+// components
+import QuizAnswers from '../components/QuizAnswers';
+import TimeLine from '../components/TimeLine';
+import NextButton from '../components/NextButton';
+import QuestionTitle from '../components/QuestionTitle';
+import TooLatePopUp from '../components/TooLatePopUp';
+
 // helper functions
 import { getCurrentQuiz, getPrevAnswers, getPrevQuestions } from '../helpers/quiz';
 import { getCurrentCategoryId } from '../helpers/categories';
@@ -14,17 +21,21 @@ import { useFunctions, answerTooLate, setQuestionStatus, nextQuestion } from '..
 let countDown;
 let onLoad;
 
+/**
+ * This is a view rendering the questions components
+ */
 const QuizPage = () => {
+    // redux
     const questions = useSelector(state => state.questionsRed.questions);
     const user_quizzes = useSelector(state => state.user_quizzesRed.user_quizzes);
     const dispatch = useDispatch();
+
     const history = useHistory();
     const [currentQ, setCurrentQ] = useState(null);
     const [isClicked, setIsClicked] = useState(false);
     const [currentAnswer, setCurrentAnswer] = useState(null);
     const [percentage, setPercentage] = useState(0);
     const [transition, setTransition] = useState(true);
-    let timeNow = Math.floor(Date.now() / 10);
     const [startTime, setStartTime] = useState('');
 
     // helper variables with functions
@@ -37,6 +48,7 @@ const QuizPage = () => {
     // hooks
     useFunctions(currentAnswer, isClicked, setCurrentAnswer, setIsClicked, currentQ, dispatch, startTime, percentage, setPercentage, setTransition, setCurrentQ, currentQuestion, countDown, history);
 
+    // sets new question, starts time & resets timeout.
     useEffect(() => {
         clearTimeout(countDown)
         let timeStart = Math.floor(Date.now() / 10);
@@ -50,6 +62,7 @@ const QuizPage = () => {
         }
     }, [currentQ]);
 
+    // sets timing animation
     useEffect(() => {
         onLoad = setTimeout(() => {
             console.log('ON LOAD')
@@ -60,40 +73,30 @@ const QuizPage = () => {
         }, 10)
     }, [percentage]);
 
+    // clears timeout if something is clicked
     useEffect(() => {
         console.log('Change in currentAnswer / isClicked')
         clearTimeout(countDown)
     }, [currentAnswer, isClicked])
 
-    console.log({ currentAnswer, percentage, isClicked });
-
     return (
         <div className="page">
-            <div id="timeLine" style={{ width: `${percentage}%`, transition: transition === true ? 'width 10s linear' : 'none' }}></div>
+            <TimeLine percentage={percentage} transition={transition} />
             <div id="quizContainer">
-                <h1>{currentQ ? currentQ.question : ''}</h1>
+                <QuestionTitle currentQ={currentQ} />
                 {currentQ
                     ?
                     <div className="quizAnswers">
                         {currentQ.answers.map((answer, index) => (
-                            <div key={index}>
-                                {isClicked === false ?
-                                    <div className={classNames({ "statusTrue": currentAnswer === index && currentQ.correct_answer === index, "statusFalse": currentAnswer === index && currentQ.correct_answer !== index }, "answer")} key={index} onClick={() => setQuestionStatus(answer, index)}>
-                                        <h2>{answer}</h2>
-                                    </div>
-                                    :
-                                    <div className={classNames({ "statusTrue": currentAnswer === index && currentQ.correct_answer === index, "statusTrueFlicker": currentQ.correct_answer === index && currentAnswer !== index, "statusFalse": currentAnswer === index && currentQ.correct_answer !== index }, "answer")} key={index}>
-                                        <h2>{answer}</h2>
-                                    </div>}
-                            </div>
+                            <QuizAnswers key={index} index={index} isClicked={isClicked} currentAnswer={currentAnswer} currentQ={currentQ} answer={answer} classNames={classNames} setQuestionStatus={setQuestionStatus} />
                         ))}
                     </div>
                     :
                     ''
                 }
-                <h2 id="tooLate" className={classNames({ 'tooLate': currentAnswer === false })}>{currentAnswer === false ? 'Too late!!' : ''}</h2>
+                <TooLatePopUp classNames={classNames} currentAnswer={currentAnswer} />
                 {currentAnswer !== null ?
-                    <button onClick={nextQuestion}>{currentQuestion.length === 0 ? 'Finish quiz!' : 'Next Question!'}</button>
+                    <NextButton nextQuestion={nextQuestion} currentQuestion={currentQuestion} />
                     :
                     ''
                 }
